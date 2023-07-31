@@ -1,17 +1,30 @@
+#M L MAIR
+#BOTAS LAB
 
+#########EDIT HERE##############
+#Give range of chromosomes to get data from
+chrStart=1
+chrEnd=23
+
+#Path to WEIGHTS folder
+path = r'./supercent/WEIGHTS/*.pos'
+
+################################
+######STOP EDITS################
 import glob
 import subprocess
 
-path = r'./supercent/WEIGHTS/*.pos'
 files = glob.glob(path)
 
-tissues=[]
+tissues=[] #Tissues to check. Can comment out loop below and list tissues as alternative
 for f in files:
 	file=f.split(".")
 	tissues.append(file[3])
+print("Checking the following tissue files:")
 print(tissues)
 
-for CHR_NUM in range(23,24):
+#loop through the chromosome range and run the pipeline on each tissue
+for CHR_NUM in range(chrStart,chrEnd):
 	CHR_NUM=str(CHR_NUM)
 	for TISSUE in tissues:
 		print("Running chr"+CHR_NUM+" for "+TISSUE)
@@ -24,6 +37,7 @@ for CHR_NUM in range(23,24):
 		cmd_str=cmd1+cmd3+cmd4+cmd5+cmd6+cmd7
 		subprocess.run(cmd_str, shell=True)
 
+#Example
 #Rscript FUSION.assoc_test.R --sumstats ./supercent/PGC2.SCZ.sumstats --weights ./supercent/WEIGHTS/GTExv8.EUR.Whole_Blood.pos --weights_dir ./supercent/WEIGHTS/ --ref_ld_chr ./LDREF/1000G.EUR. --chr 22 --out PGC2.SCZ.22.dat
 
 
