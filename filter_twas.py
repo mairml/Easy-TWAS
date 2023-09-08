@@ -5,8 +5,9 @@
 #All tissues and brain tissues
 #####EDIT HERE#########
 
-pvalcutof=0.0000001 #pval cutoff
+pvalcutoff=0.01 #pval cutoff
 path = r'./cent_TWAS_output/*' #path to TWAS outputs
+outfile=open("supercent_TWAS_summary.tsv",'w') #output
 ######################
 
 import glob
@@ -48,6 +49,9 @@ for f in files: #go through all TWAS files
 		line = l.split("\t")
 		gene= line[2]
 		tissue = line[0]
+		chrom=line[4]
+		pos0 = line[5]
+		pos1 = line[6]
 		GWASrs= line[7]
 		GWAS_z=line[8]
 		eQTLrs=line[9]
@@ -55,7 +59,7 @@ for f in files: #go through all TWAS files
 		TWASp=line[19]
 		try:
 			if float(TWASp)<pvalcutoff:
-				output=gene+"\t"+tissue+"\t"+GWASrs+"\t"+eQTLrs+"\t"+TWASz+"\t"+TWASp
+				output=gene+"\t"+tissue+"\t"+chrom+"\t"+pos0+"\t"+pos1+"\t"+GWASrs+"\t"+eQTLrs+"\t"+TWASz+"\t"+TWASp
 				store.append(output)
 				#Count number of tissues hit appears in
 				if GWASrs not in tcount:
@@ -71,12 +75,12 @@ for f in files: #go through all TWAS files
 					pass #don't count as brain tissue 
 		except:
 			pass
-outfile=open("supercent_TWAS_summary.tsv",'w')
-outfile.write("Gene\tTissue\tGWASrs\teQTLrs\tTWASz\tTWASp\tTissueCount\tTissues\tBrainTissueCount\tBrainTissues\n")
+
+outfile.write("Gene\tTissue\tChr\tP1\tP2\tGWASrs\teQTLrs\tTWASz\tTWASp\tTissueCount\tTissues\tBrainTissueCount\tBrainTissues\n")
 print(bcount)
 for i in store:
 	g=i.split("\t") #line data
-	geneid=g[2] #gene
+	geneid=g[5] #gene GWASrs
 	tissueIDs=set(tcount[geneid]) #format to count tissues
 	tissueNum=len(tissueIDs) #tissue count
 	if geneid in bcount.keys():
@@ -97,4 +101,3 @@ for i in store:
 
 data_file.close()
 outfile.close()
-
