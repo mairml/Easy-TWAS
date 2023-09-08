@@ -5,7 +5,7 @@
 #All tissues and brain tissues
 #####EDIT HERE#########
 
-pvalcutoff<0.0000001 #pval cutoff
+pvalcutof=0.0000001 #pval cutoff
 path = r'./cent_TWAS_output/*' #path to TWAS outputs
 ######################
 
